@@ -4,6 +4,6 @@ param (
 
 Push-Location "days/day-$day"
 
-cat input.txt | cargo run
+Get-Content input.txt | cargo run
 
 Pop-Location
