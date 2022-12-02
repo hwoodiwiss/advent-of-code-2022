@@ -8,8 +8,8 @@ fn main() {
     let score_choice: i32 = lines.iter().map(rock_paper_scissors_choice).sum();
     let score_outcome: i32 = lines.iter().map(rock_paper_scissors_outcome).sum();
 
-    println!("{}", score_choice);
-    println!("{}", score_outcome);
+    println!("Part 1: {}", score_choice);
+    println!("Part 2: {}", score_outcome);
 }
 
 /// Plays rock, paper, scissors and returns the score.

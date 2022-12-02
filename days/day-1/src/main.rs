@@ -13,6 +13,6 @@ fn main() {
     elves.sort();
     let end = elves.len() - 1;
 
-    println!("{:?}", elves[end]);
-    println!("{:?}", elves[end - 2..].into_iter().sum::<i32>());
+    println!("Part 1: {}", elves[end]);
+    println!("Part 2: {}", elves[end - 2..].into_iter().sum::<i32>());
 }
