@@ -85,7 +85,7 @@ fn read_instructions(lines: &[String], move_mul: bool) -> Vec<Instruction> {
         .collect()
 }
 
-fn parse_instruction(line: &String, move_mul: bool) -> Instruction {
+fn parse_instruction(line: &str, move_mul: bool) -> Instruction {
     let split_line = line.split(' ').collect::<Vec<_>>();
     match split_line[0] {
         "move" if move_mul => Instruction::MoveMul {
@@ -102,7 +102,7 @@ fn parse_instruction(line: &String, move_mul: bool) -> Instruction {
     }
 }
 
-fn run_instruction(instruction: &Instruction, state: &mut Vec<Vec<char>>) {
+fn run_instruction(instruction: &Instruction, state: &mut [Vec<char>]) {
     match instruction {
         Instruction::Move {
             count,
@@ -120,10 +120,7 @@ fn run_instruction(instruction: &Instruction, state: &mut Vec<Vec<char>>) {
             target,
         } => {
             let len = state[*source].len();
-            let mut items = (&state[*source][len - *count..])
-                .iter()
-                .map(|c| *c)
-                .collect::<Vec<char>>();
+            let mut items = state[*source][len - *count..].to_vec();
             state[*target].append(&mut items);
             for i in (len - *count..len).rev() {
                 state[*source].remove(i);
@@ -276,7 +273,6 @@ mod test {
                 assert_eq!(*source, expected_source);
                 assert_eq!(*target, expected_target);
             }
-            _ => assert!(false),
         };
     }
 }

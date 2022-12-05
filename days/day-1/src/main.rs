@@ -5,7 +5,7 @@ fn main() {
     let mut elves: Vec<i32> = lines
         .split(|ln| ln.is_empty())
         .map(|elf| {
-            elf.into_iter()
+            elf.iter()
                 .map(|m| m.trim().parse::<i32>().unwrap())
                 .sum::<i32>()
         })
@@ -14,5 +14,5 @@ fn main() {
     let end = elves.len() - 1;
 
     println!("Part 1: {}", elves[end]);
-    println!("Part 2: {}", elves[end - 2..].into_iter().sum::<i32>());
+    println!("Part 2: {}", elves[end - 2..].iter().sum::<i32>());
 }

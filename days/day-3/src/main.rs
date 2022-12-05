@@ -6,20 +6,19 @@ use std::{
 fn main() {
     print_all_priorities();
     let lines: Vec<_> = io::stdin().lock().lines().map(|ln| ln.unwrap()).collect();
-    let part1: i32 = lines.iter().map(get_invalid_priorities).sum();
+    let part1: i32 = lines.iter().map(|ln| get_invalid_priorities(ln)).sum();
     let part2: i32 = lines.chunks(3).map(get_badge_item).sum();
     println!("Part 1: {}", part1);
     println!("Part 2: {}", part2);
 }
 
-fn get_invalid_priorities(line: &String) -> i32 {
+fn get_invalid_priorities(line: &str) -> i32 {
     let mut items = HashSet::new();
     let mut found = HashSet::new();
     let mid = line.len() / 2;
 
     line[..mid].bytes().for_each(|c| {
         let _ = &items.insert(c);
-        ()
     });
     line[mid..]
         .bytes()
@@ -40,7 +39,6 @@ fn get_badge_item(lines: &[String]) -> i32 {
     let mut found_all = HashSet::new();
     lines[0].bytes().for_each(|ln| {
         let _ = &found_1.insert(ln);
-        ()
     });
 
     lines[1].bytes().for_each(|ln| {

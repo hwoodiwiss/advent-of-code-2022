@@ -2,14 +2,14 @@ use std::io::{self, BufRead};
 
 fn main() {
     let lines: Vec<_> = io::stdin().lock().lines().map(|ln| ln.unwrap()).collect();
-    let part_1: i32 = lines.iter().map(get_count_of_contained).sum();
-    let part_2: i32 = lines.iter().map(get_count_of_overlapping).sum();
+    let part_1: i32 = lines.iter().map(|ln| get_count_of_contained(ln)).sum();
+    let part_2: i32 = lines.iter().map(|ln| get_count_of_overlapping(ln)).sum();
 
     println!("Part 1: {}", part_1);
     println!("Part 2: {}", part_2);
 }
 
-fn get_count_of_contained(line: &String) -> i32 {
+fn get_count_of_contained(line: &str) -> i32 {
     let grp_separator = line.find(',').unwrap();
     let section_grp_1 = get_section_params(&line[..grp_separator]);
     let section_grp_2 = get_section_params(&line[grp_separator + 1..]);
@@ -26,7 +26,7 @@ fn get_count_of_contained(line: &String) -> i32 {
 }
 
 // Similar to 2d AABB intersection
-fn get_count_of_overlapping(line: &String) -> i32 {
+fn get_count_of_overlapping(line: &str) -> i32 {
     let grp_separator = line.find(',').unwrap();
     let section_grp_1 = get_section_params(&line[..grp_separator]);
     let section_grp_2 = get_section_params(&line[grp_separator + 1..]);
