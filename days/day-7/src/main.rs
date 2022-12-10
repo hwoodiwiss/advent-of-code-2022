@@ -58,7 +58,7 @@ impl Dir {
     fn find_dir(&self, path: &str) -> Option<Rc<RefCell<Dir>>> {
         for node in &self.items {
             if let DirectoryNode::Dir(dir) = node {
-                if dir.borrow().name == path.to_owned() {
+                if dir.borrow().name == *path {
                     return Some(dir.clone());
                 }
             }
@@ -107,19 +107,19 @@ fn main() {
     println!("Part 2: {}", dirs_bigger_than_threshold.first().unwrap());
 }
 
-fn create_dir_structure(commands: &Vec<String>) -> DirectoryNode {
+fn create_dir_structure(commands: &[String]) -> DirectoryNode {
     let root_node = DirectoryNode::Dir(Rc::new(RefCell::new(Dir::new_root("/"))));
     let mut curr_dir = match &root_node {
         DirectoryNode::Dir(dir) => dir.clone(),
         _ => unreachable!(),
     };
 
-    for line in &commands[..] {
-        if let Some(node) = try_parse_dir_node(&line, curr_dir.clone()) {
+    for line in commands {
+        if let Some(node) = try_parse_dir_node(line, curr_dir.clone()) {
             curr_dir.borrow_mut().add_node(node);
             continue;
         }
-        if let Some(command) = try_parse_command(&line) {
+        if let Some(command) = try_parse_command(line) {
             match command {
                 Command::Cd(dir) => {
                     if let Some(dir) = &curr_dir.clone().borrow().find_dir(&dir) {
@@ -175,14 +175,13 @@ fn get_sum_dirs_smaller_than(dir_node: &DirectoryNode, max_size: usize) -> usize
         } else {
             0usize
         };
-        curr_size
-            + dir
-                .clone()
-                .borrow()
-                .items
-                .iter()
-                .map(|m| get_sum_dirs_smaller_than(m, max_size))
-                .sum::<usize>()
+        let child_size = dir
+            .borrow()
+            .items
+            .iter()
+            .map(|m| get_sum_dirs_smaller_than(m, max_size))
+            .sum::<usize>();
+        curr_size + child_size
     } else {
         0usize
     }
@@ -194,11 +193,10 @@ fn get_all_dirs_greater_than(dir_node: &DirectoryNode, min_size: usize, dirs: &m
         if dir.borrow().size() >= min_size {
             dirs.push(dir.borrow().size());
         }
-        dir.clone()
-            .borrow()
+        dir.borrow()
             .items
             .iter()
-            .for_each(|m| get_all_dirs_greater_than(&m, min_size, dirs))
+            .for_each(|m| get_all_dirs_greater_than(m, min_size, dirs));
     };
 }
 
