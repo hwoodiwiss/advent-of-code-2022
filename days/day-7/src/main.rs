@@ -9,14 +9,12 @@ trait Sized {
 }
 
 struct File {
-    pub name: String,
     pub size: usize,
 }
 
 impl File {
-    fn new(name: &str, size: &str) -> Self {
+    fn new(size: &str) -> Self {
         Self {
-            name: name.to_owned(),
             size: size.parse().unwrap(),
         }
     }
@@ -161,7 +159,7 @@ fn try_parse_dir_node(node_text: &str, parent_node: Rc<RefCell<Dir>>) -> Option<
             parent_node,
         ))))),
         _ => Some(DirectoryNode::File(Rc::new(RefCell::new(File::new(
-            parts[1], parts[0],
+            parts[0],
         ))))),
     }
 }
