@@ -57,7 +57,6 @@ fn parse_instructions(lines: &[String]) -> Vec<Instruction> {
 
 fn execute_instruction(state: &mut State, instruction: &Instruction) {
     let head_pos = state.positions.first_mut().unwrap();
-    let mut prev_starting_pos = *head_pos;
 
     match instruction {
         Instruction::Up => {
@@ -77,14 +76,12 @@ fn execute_instruction(state: &mut State, instruction: &Instruction) {
     let mut prev_pos = *head_pos;
 
     for position in &mut state.positions[1..] {
-        let curr_starting_pos = *position;
-        move_if_needed(&prev_pos, &prev_starting_pos, position);
-        prev_starting_pos = curr_starting_pos;
+        move_if_needed(&prev_pos, position);
         prev_pos = *position;
     }
 }
 
-fn move_if_needed(prev_pos: &Position, starting_prev_pos: &Position, curr_pos: &mut Position) {
+fn move_if_needed(prev_pos: &Position, curr_pos: &mut Position) {
     let distance = get_distance(prev_pos, curr_pos);
     if distance.x.abs() == 2 && distance.y == 0 {
         curr_pos.x += if distance.x > 0 { 1 } else { -1 };
